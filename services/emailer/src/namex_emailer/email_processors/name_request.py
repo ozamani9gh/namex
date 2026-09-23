@@ -31,7 +31,7 @@ logger = StructuredLogging.get_logger()
 
 def process(email_info: dict) -> dict:
     """Build the email for Name Request notification."""
-    logger.debug(f"NR_notification: {email_info}")
+    logger.debug(f"NR_notification in name_request: {email_info}")
     nr_number = email_info.data.get("request", {}).get("header", {}).get("nrNum", "")
     payment_token = email_info.data.get("request", {}).get("paymentToken", "")
 

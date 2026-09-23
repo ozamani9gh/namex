@@ -133,13 +133,19 @@ def write_to_events(ce, email):
     """
     Log the event as a system-generated notification in the events table.
     """
-    # Extract and validate data
-    nr_num, option = _extract_event_data(ce)
-    if not nr_num or not option:
-        return
+    nr_num = ce.data.get("request", {}).get("header", {}).get("nrNum", None)
 
-    # Prepare event JSON
-    event_json = _prepare_event_json(nr_num, option, email)
+    if nr_num:
+        # Prepare event JSON
+        event_json = _prepare_event_json(nr_num, None, email)
+    else:
+        # Extract and validate data
+        nr_num, option = _extract_event_data(ce)
+        if not nr_num or not option:
+            return
+
+        # Prepare event JSON
+        event_json = _prepare_event_json(nr_num, option, email)
 
     # Record the notification event
     return _record_event(nr_num, event_json)
@@ -216,8 +222,8 @@ def _record_event(nr_num, event_json):
     try:
         nr_response = requests.post(f"{namex_url}/events/{nr_num}", json=payload, headers=get_headers(token))
         nr_response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
-        logger.debug(f"Successfully recorded notification event for NR {nr_num}")
+        logger.debug(f"Successfully recorded notification event for {nr_num}")
         return True
     except requests.exceptions.RequestException as e:
-        logger.error(f"Failed to record notification event for NR {nr_num}: {e}")
+        logger.error(f"Failed to record notification event for {nr_num}: {e}")
         return False
