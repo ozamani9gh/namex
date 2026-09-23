@@ -28,7 +28,7 @@ PA = "Partnership Act"
 logger = StructuredLogging.get_logger()
 def email_consent_letter(email_info: SimpleCloudEvent):
     try:
-        logger.debug(f"NR_notification: {email_info}")
+        logger.debug(f"NR_notification in email_consent_letter: {email_info}")
         nr_number = email_info.data["request"]["nrNum"]
         nr_response = query_nr_number(nr_number)
         if nr_response.status_code != HTTPStatus.OK:
@@ -73,7 +73,7 @@ def email_consent_letter(email_info: SimpleCloudEvent):
 
 def email_report(email_info: SimpleCloudEvent):
     try:
-        logger.debug(f"NR_notification: {email_info}")
+        logger.debug(f"NR_notification in email_report: {email_info}")
         nr_number = email_info.data["request"]["nrNum"]
         nr_response = query_nr_number(nr_number)
         if nr_response.status_code != HTTPStatus.OK:
