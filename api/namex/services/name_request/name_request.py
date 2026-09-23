@@ -167,6 +167,7 @@ class NameRequestService(AbstractNameRequestMixin):
             expiry_days = cls.get_expiry_days(name_request.request_action_cd, name_request.requestTypeCd)
 
             name_request.expirationDate = cls.create_expiry_date(start=start_datetime, expires_in_days=expiry_days)
+            name_request.notifiedBeforeExpiry = False
         except Exception as err:
             raise ExtendExpiryDateError(err)
 
